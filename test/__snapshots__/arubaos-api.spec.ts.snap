@@ -1,0 +1,70 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ArubaOsApiClient apiRequest should error if "payload" and "requestModifiers" are passed 1`] = `[Error: API request failed for "/object". Cannot specify GET modifiers for POST requests (requests with a payload).]`;
+
+exports[`ArubaOsApiClient apiRequest should error if response "Content-Type" isn't "application/json" 1`] = `[Error: API request failed for "/object". ERROR: Content-Type received is not 'application/json', it is 'text/html'.  {}]`;
+
+exports[`ArubaOsApiClient apiRequest should error if sessionCookie is not set 1`] = `[Error: ERROR: Authentication cookie not set.  Please use the login() method before making an API request.]`;
+
+exports[`ArubaOsApiClient apiRequest should error if the request throws an error 1`] = `[Error: API request failed for "/object". timeout]`;
+
+exports[`ArubaOsApiClient apiRequest should successfully make a get object request 1`] = `
+Object {
+  "headers": Object {
+    "Content-Type": "application/json;",
+    "Cookie": "SESSION=AOS-COOKIE",
+  },
+  "resolveWithFullResponse": true,
+  "strictSSL": true,
+  "url": "https://1.2.3.4:4343/v1/configuration/object/testObject?UIDARUBA=AOS-COOKIE&config_path=%2Fmm%2Fmynode",
+}
+`;
+
+exports[`ArubaOsApiClient apiRequest should successfully make a get object request with "getModifiers" 1`] = `
+Object {
+  "headers": Object {
+    "Content-Type": "application/json;",
+    "Cookie": "SESSION=AOS-COOKIE",
+  },
+  "resolveWithFullResponse": true,
+  "strictSSL": true,
+  "url": "https://1.2.3.4:4343/v1/configuration/object/testObject?filter=[{\\"acl_sess.accname\\":{\\"$nin\\":[\\"-acl\\"]}},{\\"OBJECT\\":{\\"$eq\\":[\\"acl_sess.accname\\"]}}]&sort=+testKey&type=committed,pending&count=5&offset=5&limit=5&total=5&UIDARUBA=AOS-COOKIE&config_path=%2Fmm%2Fmynode",
+}
+`;
+
+exports[`ArubaOsApiClient apiRequest should successfully make a set object request if "payload" data is passed 1`] = `
+Object {
+  "body": "{\\"testProp\\":\\"newValue\\"}",
+  "headers": Object {
+    "Content-Type": "application/json;",
+    "Cookie": "SESSION=AOS-COOKIE",
+  },
+  "resolveWithFullResponse": true,
+  "strictSSL": true,
+  "url": "https://1.2.3.4:4343/v1/configuration/object/testObject?UIDARUBA=AOS-COOKIE&config_path=%2Fmm%2Fmynode",
+}
+`;
+
+exports[`ArubaOsApiClient login should error if the request throws an error 1`] = `[Error: Failed to login. timeout]`;
+
+exports[`ArubaOsApiClient login should successfully login with correct credentials 1`] = `
+Object {
+  "_global_result": Object {
+    "UIDARUBA": "AOS-COOKIE",
+    "status": "0",
+    "status_str": "You've logged in successfully.",
+  },
+}
+`;
+
+exports[`ArubaOsApiClient logout should error if the request throws an error 1`] = `[Error: Failed to log out timeout]`;
+
+exports[`ArubaOsApiClient logout should successfully logout 1`] = `
+Object {
+  "_global_result": Object {
+    "UIDARUBA": "(null)",
+    "status": "0",
+    "status_str": "You've been logged out successfully.",
+  },
+}
+`;

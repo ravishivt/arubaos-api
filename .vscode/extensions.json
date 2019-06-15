@@ -1,0 +1,18 @@
+{
+  // See http://go.microsoft.com/fwlink/?LinkId=827846
+  // for the documentation about the extensions.json format
+  "recommendations": [
+    // Extension identifier format: ${publisher}.${name}. Example: vscode.csharp
+    "ms-vscode.vscode-typescript-tslint-plugin",
+    "esbenp.prettier-vscode",
+    "robertohuertasm.vscode-icons",
+    "christian-kohler.path-intellisense",
+    "spywhere.guides",
+    "PeterJausovec.vscode-docker",
+    "eamodio.gitlens",
+    "vector-of-bool.gitflow",
+    "asvetliakov.snapshot-tools",
+    // Used for auto-generation of table of contents in markdown files.
+    "yzhang.markdown-all-in-one"
+  ]
+}

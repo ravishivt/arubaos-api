@@ -1,0 +1,23 @@
+{
+  "__comments": [
+    "// Use IntelliSense to learn about possible Node.js debug attributes.",
+    "// Hover to view descriptions of existing attributes.",
+    "// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387",
+    "// Make sure running vscode >= 1.14 for dubugger to work.",
+    "//   https://github.com/Microsoft/vscode/issues/23257"
+  ],
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Server",
+      "type": "node",
+      "request": "attach",
+      "port": 9229,
+      "protocol": "inspector",
+      "sourceMaps": true,
+      "localRoot": "${workspaceRoot}",
+      "remoteRoot": "/usr/src/app",
+      "restart": true
+    }
+  ]
+}

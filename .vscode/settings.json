@@ -1,0 +1,35 @@
+{
+  "files.autoSave": "onFocusChange",
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.formatOnSave": true,
+  "editor.minimap.enabled": false,
+  // https://stackoverflow.com/q/33236399/684893
+  "editor.autoClosingBrackets": "never",
+  // unformatted for html scripts, for vscode format is messing with {{{}}}
+  "html.format.unformatted": "script",
+  "javascript.format.enable": false,
+  "javascript.validate.enable": false,
+  "vsicons.presets.angular": false,
+  "search.exclude": {
+    "*.js.map": true,
+    "**/build": true,
+    "**/node_modules": true,
+    "**/coverage": true,
+    "./local": true,
+    "./asp-frontend": true
+  },
+  "files.exclude": {
+    "**/node_modules": true,
+    "// Ignore jest tmp folders until following issue is fixed, https://github.com/facebook/jest/issues/3573": false,
+    "jest_0/": true,
+    "v8-compile-cache-0/": true
+  },
+  "tslint.enable": true,
+  "tslint.configFile": "./tslint.json",
+  "tslint.autoFixOnSave": true,
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "[yaml]": {
+    "editor.formatOnSave": false
+  }
+}
