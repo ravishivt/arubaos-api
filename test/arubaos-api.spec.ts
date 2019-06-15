@@ -10,11 +10,6 @@ const testSetUp = (options?: Partial<ArubaOsApiOptions>) => {
     host: '1.2.3.4',
     username: 'admin',
     password: 'abc',
-  });
-  return new ArubaOsApiClient({
-    host: '1.2.3.4',
-    username: 'admin',
-    password: 'abc',
     debugEnabled: false,
     ...options,
   });
@@ -124,7 +119,7 @@ describe(`ArubaOsApiClient`, () => {
       }
     });
 
-    it(`should error if "payload" and "requestModifiers" are passed`, async () => {
+    it(`should error if "payload" and "getModifiers" are passed`, async () => {
       const aosClient = testSetUp();
       aosClient.sessionCookie = 'AOS-COOKIE';
 
@@ -168,6 +163,59 @@ describe(`ArubaOsApiClient`, () => {
       const response = await aosClient.apiRequest({
         requestType: 'object',
         objectName: 'testObject',
+      });
+      expect(response).toEqual({});
+      expect(mockedRequest.get).toHaveBeenCalledTimes(1);
+      expect(mockedRequest.post).toHaveBeenCalledTimes(0);
+      expect(mockedRequest.get.mock.calls[0][0]).toMatchSnapshot();
+    });
+
+    it(
+      `should successfully make a get object request and print out ` +
+        `the "preparedUrl" when "debugEnabled: true"`,
+      async () => {
+        const aosClient = testSetUp({ debugEnabled: true });
+        aosClient.sessionCookie = 'AOS-COOKIE';
+
+        mockedRequest.get.mockResolvedValue({ body: '{}' });
+        jest.spyOn(global.console, 'debug');
+        const response = await aosClient.apiRequest({
+          requestType: 'object',
+        });
+        expect(response).toEqual({});
+        expect(console.debug).toHaveBeenCalledTimes(1);
+        expect(mockedRequest.get).toHaveBeenCalledTimes(1);
+        expect(mockedRequest.post).toHaveBeenCalledTimes(0);
+        expect(mockedRequest.get.mock.calls[0][0]).toMatchSnapshot();
+      },
+    );
+
+    it(`should successfully make a get object request with an empty "getModifiers"`, async () => {
+      const aosClient = testSetUp();
+      aosClient.sessionCookie = 'AOS-COOKIE';
+
+      mockedRequest.get.mockResolvedValue({ body: '{}' });
+      const response = await aosClient.apiRequest({
+        requestType: 'object',
+        getModifiers: {},
+      });
+      expect(response).toEqual({});
+      expect(mockedRequest.get).toHaveBeenCalledTimes(1);
+      expect(mockedRequest.post).toHaveBeenCalledTimes(0);
+      expect(mockedRequest.get.mock.calls[0][0]).toMatchSnapshot();
+    });
+
+    it(`should successfully make a get object request with "count" only in "getModifiers"`, async () => {
+      const aosClient = testSetUp();
+      aosClient.sessionCookie = 'AOS-COOKIE';
+
+      mockedRequest.get.mockResolvedValue({ body: '{}' });
+      const response = await aosClient.apiRequest({
+        requestType: 'object',
+        objectName: 'testObject',
+        getModifiers: {
+          count: 5,
+        },
       });
       expect(response).toEqual({});
       expect(mockedRequest.get).toHaveBeenCalledTimes(1);

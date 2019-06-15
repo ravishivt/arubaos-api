@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ArubaOsApiClient apiRequest should error if "payload" and "requestModifiers" are passed 1`] = `[Error: API request failed for "/object". Cannot specify GET modifiers for POST requests (requests with a payload).]`;
+exports[`ArubaOsApiClient apiRequest should error if "payload" and "getModifiers" are passed 1`] = `[Error: API request failed for "/object". Cannot specify GET modifiers for POST requests (requests with a payload).]`;
 
 exports[`ArubaOsApiClient apiRequest should error if response "Content-Type" isn't "application/json" 1`] = `[Error: API request failed for "/object". ERROR: Content-Type received is not 'application/json', it is 'text/html'.  {}]`;
 
@@ -20,6 +20,30 @@ Object {
 }
 `;
 
+exports[`ArubaOsApiClient apiRequest should successfully make a get object request and print out the "preparedUrl" when "debugEnabled: true" 1`] = `
+Object {
+  "headers": Object {
+    "Content-Type": "application/json;",
+    "Cookie": "SESSION=AOS-COOKIE",
+  },
+  "resolveWithFullResponse": true,
+  "strictSSL": true,
+  "url": "https://1.2.3.4:4343/v1/configuration/object?UIDARUBA=AOS-COOKIE&config_path=%2Fmm%2Fmynode",
+}
+`;
+
+exports[`ArubaOsApiClient apiRequest should successfully make a get object request with "count" only in "getModifiers" 1`] = `
+Object {
+  "headers": Object {
+    "Content-Type": "application/json;",
+    "Cookie": "SESSION=AOS-COOKIE",
+  },
+  "resolveWithFullResponse": true,
+  "strictSSL": true,
+  "url": "https://1.2.3.4:4343/v1/configuration/object/testObject?count=5&UIDARUBA=AOS-COOKIE&config_path=%2Fmm%2Fmynode",
+}
+`;
+
 exports[`ArubaOsApiClient apiRequest should successfully make a get object request with "getModifiers" 1`] = `
 Object {
   "headers": Object {
@@ -29,6 +53,18 @@ Object {
   "resolveWithFullResponse": true,
   "strictSSL": true,
   "url": "https://1.2.3.4:4343/v1/configuration/object/testObject?filter=[{\\"acl_sess.accname\\":{\\"$nin\\":[\\"-acl\\"]}},{\\"OBJECT\\":{\\"$eq\\":[\\"acl_sess.accname\\"]}}]&sort=+testKey&type=committed,pending&count=5&offset=5&limit=5&total=5&UIDARUBA=AOS-COOKIE&config_path=%2Fmm%2Fmynode",
+}
+`;
+
+exports[`ArubaOsApiClient apiRequest should successfully make a get object request with an empty "getModifiers" 1`] = `
+Object {
+  "headers": Object {
+    "Content-Type": "application/json;",
+    "Cookie": "SESSION=AOS-COOKIE",
+  },
+  "resolveWithFullResponse": true,
+  "strictSSL": true,
+  "url": "https://1.2.3.4:4343/v1/configuration/object?UIDARUBA=AOS-COOKIE&config_path=%2Fmm%2Fmynode",
 }
 `;
 
