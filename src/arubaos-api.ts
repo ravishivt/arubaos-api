@@ -1,5 +1,22 @@
 import { get, OptionsWithUrl, post } from 'request-promise-native';
 
+/**
+ * Main entrypoint.  Create an instance of this class with a set of `ArubaOsApiOptions` options
+ *   containing your local environment settings.  You can then `login()` and make
+ *   `apiRequest()` calls.
+ *
+ * ```ts
+ * const apiClient = new ArubaOsApiClient({
+ *   host: '1.2.3.4',
+ *   username: 'admin',
+ *   password: 'abc'
+ * });
+ * await apiClient.login();
+ * await apiClient.apiRequest({
+ *   requestType: 'object',
+ * });
+ * ```
+ */
 export class ArubaOsApiClient {
   public sessionCookie?: string;
   private options: Required<ArubaOsApiOptions>;
@@ -8,6 +25,10 @@ export class ArubaOsApiClient {
     this.options = { ...this.getDefaultOptions(), ...options };
   }
 
+  /**
+   * Logs into the controller with the credentials set in the `ArubaOsApiOptions`.
+   * If successful, `sessionCookie` will be set and will be used for subsequent API requests.
+   */
   public async login() {
     try {
       const response = await post({
@@ -28,6 +49,9 @@ export class ArubaOsApiClient {
     }
   }
 
+  /**
+   * Logs out of the controller and unsets the `sessionCookie` property.
+   */
   public async logout() {
     try {
       const response = await get({
@@ -49,6 +73,9 @@ export class ArubaOsApiClient {
   /**
    * Generic helper method to prepare API requests with all supported
    *   options including GET and SET requests.
+   *
+   * If `payload` param is passed, a `POST` request is used the payload is put in the request `body`.
+   *   If `payload` not passed, a `GET` with no payload is used.
    */
   public async apiRequest({
     requestType,
@@ -87,10 +114,6 @@ export class ArubaOsApiClient {
         strictSSL: this.options.strictSSL,
         resolveWithFullResponse: true,
       };
-      /**
-       * If `payload` param is passed, use a `POST` requst and put the payload in the request body.
-       * Else, use `GET` with no payload.
-       */
       const response = await (payload ? post(requestOptions) : get(requestOptions));
       if (response.headers && response.headers['content-type'] !== 'application/json') {
         throw new Error(
@@ -157,25 +180,48 @@ export class ArubaOsApiClient {
   }
 }
 
-export type FilterOperKeys = '$eq' | '$neq' | '$gt' | '$gte' | '$lt' | '$lte' | '$in' | '$nin';
+/**
+ * Controls which operation should be applied to the filter value.
+ */
+export type FilterOperationKeys = '$eq' | '$neq' | '$gt' | '$gte' | '$lt' | '$lte' | '$in' | '$nin';
 
+/**
+ * Configuration parameters used for the lifespan of the `ArubaOsApiClient` instance.
+ */
 export interface ArubaOsApiOptions {
-  // Management IP of the controller the API will target.
+  /**
+   * Management IP of the controller the API will target.
+   */
   host: string;
-  // Admin user on the controller.
+  /**
+   * Admin user on the controller.
+   */
   username: string;
-  // Consider using environment variable or command line argument for added security.
+  /**
+   * Consider using environment variable or command line argument for added security.
+   */
   password: string;
-  // Set if using non-default port (4343).
+  /**
+   * Set if using non-default port (4343).
+   */
   port?: number;
-  // The default target config-node or config-path.  This can be overriden later in code.
+  /**
+   * The default target config-node or config-path.  This can be overriden later in code.
+   */
   defaultConfigPath?: string;
-  // Disable if controller doesn't have a trusted certificate.
+  /**
+   * Disable if controller doesn't have a trusted certificate.
+   */
   strictSSL?: boolean;
-  // Enable to get additional logging.
+  /**
+   * Enable to get additional logging.
+   */
   debugEnabled?: boolean;
 }
 
+/**
+ * All Get modifiers supported by the ArubaOS API.
+ */
 export interface ArubaOsApiRequestGetModifiers {
   /**
    * Limit which objects, sub_objects, or configuration elements should be
@@ -183,7 +229,7 @@ export interface ArubaOsApiRequestGetModifiers {
    */
   filter?: Array<{
     [key: string]: {
-      [key in FilterOperKeys]?: Array<string | number | boolean> | string | number | boolean;
+      [key in FilterOperationKeys]?: Array<string | number | boolean> | string | number | boolean;
     };
   }>;
   /**
@@ -221,7 +267,14 @@ export interface ArubaOsApiRequestGetModifiers {
   };
 }
 
+/**
+ * Control what you want to read (Get/GET) or create/update/delete (Set/POST).
+ */
 export interface ArubaOsApiRequestOptions {
+  /**
+   * Select whether you are working with `containers` (a group of `objects`) or
+   *   individual `objects`.
+   */
   requestType: 'object' | 'container';
   /**
    * Name of a specific API `object` or `container`.
@@ -237,5 +290,8 @@ export interface ArubaOsApiRequestOptions {
    * Override the DEFAULT_CONFIG_PATH setting for this request.
    */
   configPath?: string;
+  /**
+   * Modifiers for Get (GET) queries including sorting, filtering, and/or pagination.
+   */
   getModifiers?: ArubaOsApiRequestGetModifiers;
 }

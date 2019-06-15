@@ -10,6 +10,11 @@ const testSetUp = (options?: Partial<ArubaOsApiOptions>) => {
     host: '1.2.3.4',
     username: 'admin',
     password: 'abc',
+  });
+  return new ArubaOsApiClient({
+    host: '1.2.3.4',
+    username: 'admin',
+    password: 'abc',
     debugEnabled: false,
     ...options,
   });
