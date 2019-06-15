@@ -121,7 +121,7 @@
   },
   "dependencies": {
     "request": "2.88.0",
-    "request-promise-native": "1.0.6"
+    "request-promise-native": "1.0.7"
   },
   "husky": {
     "hooks": {
