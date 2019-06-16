@@ -1,153 +1,99 @@
-# ArubaOS API
+# ArubaOS API for NodeJS
 
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 [![Greenkeeper badge](https://badges.greenkeeper.io/ravishivt/arubaos-api.svg)](https://greenkeeper.io/)
 [![Travis](https://img.shields.io/travis/ravishivt/arubaos-api.svg)](https://travis-ci.org/ravishivt/arubaos-api)
 [![Coveralls](https://img.shields.io/coveralls/ravishivt/arubaos-api.svg)](https://coveralls.io/github/ravishivt/arubaos-api)
-[![Donate](https://img.shields.io/badge/donate-paypal-blue.svg)](https://paypal.me/AJoverMorales)
 
-A starter project that makes creating a TypeScript library extremely easy.
+Programmatically interact with your ArubaOS 8.x and above infrastructure using the [ArubaOS API](api-documentation).
 
-![](https://i.imgur.com/opUmHp0.png)
+- [ArubaOS API for NodeJS](#arubaos-api-for-nodejs)
+  - [Install](#install)
+  - [Use](#use)
+    - [Quick-start Samples](#quick-start-samples)
+      - [listAllObjectsAndContainers.ts](#listallobjectsandcontainersts)
+      - [paginateFilteredSessionACLs.ts](#paginatefilteredsessionaclsts)
+      - [updateNetDestWithDynamicWanIp.ts](#updatenetdestwithdynamicwanipts)
+  - [Supported features](#supported-features)
+  - [TODO](#todo)
 
-### Usage
+## Install
 
-```bash
-git clone https://github.com/ravishivt/arubaos-api.git YOURFOLDERNAME
-cd YOURFOLDERNAME
+`npm install arubaos-api`
 
-# Run npm install and write your library name when asked. That's all!
-npm install
+## Use
+
+Read through the ArubaOS API Guide to understand the API's main concepts, i.e. `Get`, `Set`, `Object`, `Containers`, etc..  The latest guide can be found on [Aruba Support Portal](https://asp.arubanetworks.com/downloads;productIds=UHJvZHVjdDoxNDU3YzM0MC0yZTAwLTExZTgtYTBlMy0yZjg0MDRkYzQ3YmU%3D;documentFileContentIds=RmlsZUNvbnRlbnQ6OGZhNDU5NGMtMmUyMi0xMWU4LWJhODYtNGYzZGFiNzBiMWY3).
+
+Also read through this [library's API documentation](https://ravishivt.github.io/arubaos-api/classes/arubaosapiclient.html).
+
+Below is an example of using this library to log into a controller, retrieve and print all configured VLANs, and then log out.
+
+```ts
+import { ArubaOsApiClient } from "arubaos-api";
+
+const main = async () => {
+  // Create a new client instance with your controller's info.
+  const aosClient = new ArubaOsApiClient({
+    host: "10.1.1.1",
+    username: "admin",
+    password: "password",
+    strictSSL: false,
+  });
+
+  // Log in, which sets a session cookie for future API requests.
+  await aosClient.login();
+
+  // Make an API request.
+  const responseAllVlans = await aosClient.apiRequest({
+    requestType: "object",
+    objectName: "vlan_id",
+  });
+
+  // Pretty-print the results.
+  console.log(JSON.stringify(responseAllVlans, null, 2));
+
+  // Log out.
+  await aosClient.logout();
+};
+
+main();
 ```
 
-**Start coding!** `package.json` and entry files are already set up for you, so don't worry about linking to your main file, typings, etc. Just keep those files with the same name.
+### Quick-start Samples
 
-### Features
+A few sample scripts are provided to demonstrate how to use the API.  See the [./samples](./samples) directory.
 
- - Zero-setup. After running `npm install` things will setup for you :wink:
- - **[RollupJS](https://rollupjs.org/)** for multiple optimized bundles following the [standard convention](http://2ality.com/2017/04/setting-up-multi-platform-packages.html) and [Tree-shaking](https://alexjoverm.github.io/2017/03/06/Tree-shaking-with-Webpack-2-TypeScript-and-Babel/)
- - Tests, coverage and interactive watch mode using **[Jest](http://facebook.github.io/jest/)**
- - **[Prettier](https://github.com/prettier/prettier)** and **[TSLint](https://palantir.github.io/tslint/)** for code formatting and consistency
- - **Docs automatic generation and deployment** to `gh-pages`, using **[TypeDoc](http://typedoc.org/)**
- - Automatic types `(*.d.ts)` file generation
- - **[Travis](https://travis-ci.org)** integration and **[Coveralls](https://coveralls.io/)** report
- - (Optional) **Automatic releases and changelog**, using [Semantic release](https://github.com/semantic-release/semantic-release), [Commitizen](https://github.com/commitizen/cz-cli), [Conventional changelog](https://github.com/conventional-changelog/conventional-changelog) and [Husky](https://github.com/typicode/husky) (for the git hooks)
+#### [listAllObjectsAndContainers.ts](./samples/listAllObjectsAndContainers.ts)
+Fetches all `objects` and `containers` from the API and stores them into respective files. The results provide the API schema, which is useful to know what specific endpoints to query/update and also what the expect in the output.
 
-### Importing library
+#### [paginateFilteredSessionACLs.ts](./samples/paginateFilteredSessionACLs.ts)
+This sample demonstrates how to use the `getModifiers` to paginate through a long list of items and with filters applied.
 
-You can import the generated bundle to use the whole library generated by this starter:
+The object we are querying in this example are ACLs (`acl_sess`) but could be swapped for other objects.
 
-```javascript
-import myLib from 'mylib'
-```
+#### [updateNetDestWithDynamicWanIp.ts](./samples/updateNetDestWithDynamicWanIp.ts)
+This sample is more task-oriented that covers a `Get` request with filters, a `Set` request to update an object, and a `write memory` request.  Specifically, this sample updates a netdestination object to your current public IP (external-facing IP), which is useful when your ISP provides dynamic IPs and you want to apply inbound/outbound network policies.
 
-Additionally, you can import the transpiled modules from `dist/lib` in case you have a modular library:
+## Supported features
 
-```javascript
-import something from 'mylib/dist/lib/something'
-```
++ Authentication - Log in and log out using session cookies.
++ Get and Set (GET and POST) requests to retreive and modify config.
++ All GET request filters and modifiers are supported including:
+  + `Object`
+  + `Data`
+  + `Data-Type`
+  + `Count`
+  + `Sort`
+  + `Paginate`
++ Typing support is embedded to guide usage with IDE IntelliSense and to prevent use of invalid options/values.
 
-### NPM scripts
+## TODO
 
- - `npm t`: Run test suite
- - `npm start`: Run `npm run build` in watch mode
- - `npm run test:watch`: Run test suite in [interactive watch mode](http://facebook.github.io/jest/docs/cli.html#watch)
- - `npm run test:prod`: Run linting and generate coverage
- - `npm run build`: Generate bundles and typings, create docs
- - `npm run lint`: Lints code
- - `npm run commit`: Commit using conventional commit style ([husky](https://github.com/typicode/husky) will tell you to use it if you haven't :wink:)
+Not all ArubaOS 8.x API features are supported yet.  The remaining items to implement are:
 
-### Excluding peerDependencies
++ Run show commands, e.g. `/configuration/showcommand?command=<SHOW_COMMAND>`.
++ Multi-part SET requests.
++ Add more samples to the project.
 
-On library development, one might want to set some peer dependencies, and thus remove those from the final bundle. You can see in [Rollup docs](https://rollupjs.org/#peer-dependencies) how to do that.
-
-Good news: the setup is here for you, you must only include the dependency name in `external` property within `rollup.config.js`. For example, if you want to exclude `lodash`, just write there `external: ['lodash']`.
-
-### Automatic releases
-
-_**Prerequisites**: you need to create/login accounts and add your project to:_
- - [npm](https://www.npmjs.com/)
- - [Travis CI](https://travis-ci.org)
- - [Coveralls](https://coveralls.io)
-
-_**Prerequisite for Windows**: Semantic-release uses
-**[node-gyp](https://github.com/nodejs/node-gyp)** so you will need to
-install
-[Microsoft's windows-build-tools](https://github.com/felixrieseberg/windows-build-tools)
-using this command:_
-
-```bash
-npm install --global --production windows-build-tools
-```
-
-#### Setup steps
-
-Follow the console instructions to install semantic release and run it (answer NO to "Do you want a `.travis.yml` file with semantic-release setup?").
-
-_Note: make sure you've setup `repository.url` in your `package.json` file_
-
-```bash
-npm install -g semantic-release-cli
-semantic-release-cli setup
-# IMPORTANT!! Answer NO to "Do you want a `.travis.yml` file with semantic-release setup?" question. It is already prepared for you :P
-```
-
-From now on, you'll need to use `npm run commit`, which is a convenient way to create conventional commits.
-
-Automatic releases are possible thanks to [semantic release](https://github.com/semantic-release/semantic-release), which publishes your code automatically on [github](https://github.com/) and [npm](https://www.npmjs.com/), plus generates automatically a changelog. This setup is highly influenced by [Kent C. Dodds course on egghead.io](https://egghead.io/courses/how-to-write-an-open-source-javascript-library)
-
-### Git Hooks
-
-There is already set a `precommit` hook for formatting your code with Prettier :nail_care:
-
-By default, there are two disabled git hooks. They're set up when you run the `npm run semantic-release-prepare` script. They make sure:
- - You follow a [conventional commit message](https://github.com/conventional-changelog/conventional-changelog)
- - Your build is not going to fail in [Travis](https://travis-ci.org) (or your CI server), since it's runned locally before `git push`
-
-This makes more sense in combination with [automatic releases](#automatic-releases)
-
-### FAQ
-
-#### `Array.prototype.from`, `Promise`, `Map`... is undefined?
-
-TypeScript or Babel only provides down-emits on syntactical features (`class`, `let`, `async/await`...), but not on functional features (`Array.prototype.find`, `Set`, `Promise`...), . For that, you need Polyfills, such as [`core-js`](https://github.com/zloirock/core-js) or [`babel-polyfill`](https://babeljs.io/docs/usage/polyfill/) (which extends `core-js`).
-
-For a library, `core-js` plays very nicely, since you can import just the polyfills you need:
-
-```javascript
-import "core-js/fn/array/find"
-import "core-js/fn/string/includes"
-import "core-js/fn/promise"
-...
-```
-
-#### What is `npm install` doing on first run?
-
-It runs the script `tools/init` which sets up everything for you. In short, it:
- - Configures RollupJS for the build, which creates the bundles
- - Configures `package.json` (typings file, main file, etc)
- - Renames main src and test files
-
-#### What if I don't want git-hooks, automatic releases or semantic-release?
-
-Then you may want to:
- - Remove `commitmsg`, `postinstall` scripts from `package.json`. That will not use those git hooks to make sure you make a conventional commit
- - Remove `npm run semantic-release` from `.travis.yml`
-
-#### What if I don't want to use coveralls or report my coverage?
-
-Remove `npm run report-coverage` from `.travis.yml`
-
-## Resources
-
-- [Write a library using TypeScript library starter](https://dev.to/alexjoverm/write-a-library-using-typescript-library-starter) by [@alexjoverm](https://github.com/alexjoverm/)
-- [📺 Create a TypeScript Library using typescript-library-starter](https://egghead.io/lessons/typescript-create-a-typescript-library-using-typescript-library-starter) by [@alexjoverm](https://github.com/alexjoverm/)
-- [Introducing TypeScript Library Starter Lite](https://blog.tonysneed.com/2017/09/15/introducing-typescript-library-starter-lite/) by [@tonysneed](https://github.com/tonysneed)
-
-## Projects using `typescript-library-starter`
-
-Here are some projects that use `typescript-library-starter`:
-
-- [NOEL - A universal, human-centric, replayable event emitter](https://github.com/lifenautjoe/noel)
-- [droppable - A library to give file dropping super-powers to any HTML element.](https://github.com/lifenautjoe/droppable)
-- [redis-messaging-manager - Pubsub messaging library, using redis and rxjs](https://github.com/tomyitav/redis-messaging-manager)
+[api-documentation]: https://www.arubanetworks.com/techdocs/ArubaOS_84_Web_Help/content/nbapiguide/api_overview/npapi.htm
