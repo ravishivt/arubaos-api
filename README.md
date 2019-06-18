@@ -5,17 +5,20 @@
 [![Travis](https://img.shields.io/travis/ravishivt/arubaos-api.svg)](https://travis-ci.org/ravishivt/arubaos-api)
 [![Coveralls](https://img.shields.io/coveralls/ravishivt/arubaos-api.svg)](https://coveralls.io/github/ravishivt/arubaos-api)
 
-Programmatically interact with your ArubaOS 8.x and above infrastructure using the [ArubaOS API](api-documentation).
+Programmatically interact with your ArubaOS 8.x and above infrastructure using the [ArubaOS API][api-documentation].
 
-- [ArubaOS API for NodeJS](#arubaos-api-for-nodejs)
-  - [Install](#install)
-  - [Use](#use)
-    - [Quick-start Samples](#quick-start-samples)
-      - [listAllObjectsAndContainers.ts](#listallobjectsandcontainersts)
-      - [paginateFilteredSessionACLs.ts](#paginatefilteredsessionaclsts)
-      - [updateNetDestWithDynamicWanIp.ts](#updatenetdestwithdynamicwanipts)
-  - [Supported features](#supported-features)
-  - [TODO](#todo)
+
+## Contents 
+- [ArubaOS API for NodeJS](#ArubaOS-API-for-NodeJS)
+  - [Contents](#Contents)
+  - [Install](#Install)
+  - [Use](#Use)
+    - [Quick-start Samples](#Quick-start-Samples)
+      - [listAllObjectsAndContainers.ts](#listAllObjectsAndContainersts)
+      - [paginateFilteredSessionACLs.ts](#paginateFilteredSessionACLsts)
+      - [updateNetDestWithDynamicWanIp.ts](#updateNetDestWithDynamicWanIpts)
+  - [Supported features](#Supported-features)
+  - [TODO](#TODO)
 
 ## Install
 
@@ -23,7 +26,7 @@ Programmatically interact with your ArubaOS 8.x and above infrastructure using t
 
 ## Use
 
-Read through the ArubaOS API Guide to understand the API's main concepts, i.e. `Get`, `Set`, `Object`, `Containers`, etc..  The latest guide can be found on [Aruba Support Portal](https://asp.arubanetworks.com/downloads;productIds=UHJvZHVjdDoxNDU3YzM0MC0yZTAwLTExZTgtYTBlMy0yZjg0MDRkYzQ3YmU%3D;documentFileContentIds=RmlsZUNvbnRlbnQ6OGZhNDU5NGMtMmUyMi0xMWU4LWJhODYtNGYzZGFiNzBiMWY3).
+Read through the ArubaOS API Guide to understand the API's main concepts, i.e. `Get`, `Set`, `Objects`, `Containers`, etc..  The latest guide can be found on [Aruba Support Portal](https://asp.arubanetworks.com/downloads;productIds=UHJvZHVjdDoxNDU3YzM0MC0yZTAwLTExZTgtYTBlMy0yZjg0MDRkYzQ3YmU%3D;documentFileContentIds=RmlsZUNvbnRlbnQ6OGZhNDU5NGMtMmUyMi0xMWU4LWJhODYtNGYzZGFiNzBiMWY3).
 
 Also read through this [library's API documentation](https://ravishivt.github.io/arubaos-api/classes/arubaosapiclient.html).
 
