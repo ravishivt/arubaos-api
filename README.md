@@ -1,4 +1,4 @@
-# ArubaOS API for NodeJS
+# ArubaOS API for Node.js
 
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 [![Greenkeeper badge](https://badges.greenkeeper.io/ravishivt/arubaos-api.svg)](https://greenkeeper.io/)
@@ -9,7 +9,7 @@ Programmatically interact with your ArubaOS 8.x and above infrastructure using t
 
 
 ## Contents 
-- [ArubaOS API for NodeJS](#ArubaOS-API-for-NodeJS)
+- [ArubaOS API for Node.js](#ArubaOS-API-for-Nodejs)
   - [Contents](#Contents)
   - [Install](#Install)
   - [Use](#Use)
